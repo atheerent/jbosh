@@ -1,5 +1,5 @@
 ext {
-		shortVersion = 'atheer-0.10.0'
+		shortVersion = 'atheer-0.10.1'
 		isSnapshot = true
 		smackMinAndroidSdk = 9
 }

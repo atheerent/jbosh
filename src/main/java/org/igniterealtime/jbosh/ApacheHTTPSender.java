@@ -147,13 +147,16 @@ final class ApacheHTTPSender implements HTTPSender {
 
         org.apache.http.impl.client.DefaultHttpClient defaultHttpClient = new org.apache.http.impl.client.DefaultHttpClient(cm, params);
 
-        //if (config != null &&
-        //        config.getProxyHost() != null &&
-        //        config.getProxyPort() != 0) {
-        //    defaultHttpClient.getCredentialsProvider().setCredentials(
-        //            new AuthScope("10.0.0.42", 3120),
-        //            new UsernamePasswordCredentials("proxy", "hamid123"));
-        //}
+        if (config != null &&
+                config.getProxyHost() != null &&
+                config.getProxyPort() != 0) {
+
+            if(System.getProperty("atheer.proxy.username") != null) {
+                defaultHttpClient.getCredentialsProvider().setCredentials(
+                        new AuthScope(config.getProxyHost(), config.getProxyPort()),
+                        new UsernamePasswordCredentials(System.getProperty("atheer.proxy.username"), System.getProperty("atheer.proxy.password")));
+            }      
+        }
         return defaultHttpClient;
     }
 }

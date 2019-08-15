@@ -22,6 +22,9 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.HttpHost;
 
 /**
  * Implementation of the {@code HTTPSender} interface which uses the
@@ -128,7 +131,7 @@ final class ApacheHTTPSender implements HTTPSender {
             params.setParameter(org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY, proxy);
         }
 
-        // Create and initialize scheme registry 
+        // Create and initialize scheme registry
         org.apache.http.conn.scheme.SchemeRegistry schemeRegistry = new org.apache.http.conn.scheme.SchemeRegistry();
         schemeRegistry.register(
                 new org.apache.http.conn.scheme.Scheme("http", org.apache.http.conn.scheme.PlainSocketFactory.getSocketFactory(), 80));
@@ -141,6 +144,16 @@ final class ApacheHTTPSender implements HTTPSender {
         // This connection manager must be used if more than one thread will
         // be using the HttpClient.
         org.apache.http.conn.ClientConnectionManager cm = new org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager(params, schemeRegistry);
-        return new org.apache.http.impl.client.DefaultHttpClient(cm, params);
+
+        org.apache.http.impl.client.DefaultHttpClient defaultHttpClient = new org.apache.http.impl.client.DefaultHttpClient(cm, params);
+
+        //if (config != null &&
+        //        config.getProxyHost() != null &&
+        //        config.getProxyPort() != 0) {
+        //    defaultHttpClient.getCredentialsProvider().setCredentials(
+        //            new AuthScope("10.0.0.42", 3120),
+        //            new UsernamePasswordCredentials("proxy", "hamid123"));
+        //}
+        return defaultHttpClient;
     }
 }
